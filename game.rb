@@ -51,21 +51,21 @@ class Game
   # This method simply loop for each turn and check if there's any winner for each turn
   def party
     last_player = @player2
-    begin
-      last_player == @player2 ? last_player = @player1 : last_player = @player2
+    while wehaveawinner.empty? && !partyover
+      last_player = last_player == @player2 ? @player1 : @player2
       next_turn(last_player.name, last_player.mark)
       @board.draw_board
       wehaveawinner = win?(last_player.mark)
       partyover = party_over?
-    end while wehaveawinner.empty? && !partyover
+    end
 
     if !wehaveawinner.empty?
-        last_player.update_status("VICTORY")
-        puts ("\n \(ᵔᵕᵔ)/".cyan.bold + " W".blue + "E".magenta + " H".cyan + "A".yellow + "V".red + "E".blue + " A".magenta + " W".cyan + "I".yellow + "N".blue + "N".magenta + "E".cyan + "R".yellow + " !!!!".yellow + " \(ᵔᵕᵔ)/".magenta.bold + "\n" + "C".blue + "O".magenta + "N".cyan + "G".yellow + "R".blue + "A".magenta + "T".cyan + "U".yellow + "L".blue + "A".magenta + "T".cyan + "I".yellow + "O".blue + "N".magenta + "S ".cyan + "#{last_player.name.upcase}".green + " ( ⌐ ■ _■ ) ").bold
+      last_player.update_status("VICTORY")
+      puts ("\n \(ᵔᵕᵔ)/".cyan.bold + " W".blue + "E".magenta + " H".cyan + "A".yellow + "V".red +   "E".blue + " A".magenta + " W".cyan + "I".yellow + "N".blue + "N".magenta + "E".cyan + "R".yellow   + " !!!!".yellow + " \(ᵔᵕᵔ)/".magenta.bold + "\n" + "C".blue + "O".magenta + "N".cyan +   "G".yellow + "R".blue + "A".magenta + "T".cyan + "U".yellow + "L".blue + "A".magenta + "T".cyan +   "I".yellow + "O".blue + "N".magenta + "S ".cyan + "#{last_player.name.upcase}".green + " ( ⌐ ■ _■   ) ").bold
     elsif partyover
-        puts "AAaaaaw, YOU BOTH SUCK ¯\_(ツ)_/¯ \n But practive makes perfect sooo..PRACTICE ( ͡° ͜ʖ ͡°)".red.bold
+      puts "AAaaaaw, YOU BOTH SUCK ¯\_(ツ)_/¯ \n But practive makes perfect sooo..PRACTICE ( ͡° ͜ʖ ͡°)".red.bold
     end
-end
+  end
 
   # ** NEXT TURN **
   # This method will prompt the next player for next action and update the case accordingly
@@ -89,7 +89,7 @@ end
 
   # ** VALID CASE ? **
   # This method checks if the number of the case entered by the player is valid
-  def valid_case?(value, player)
+  def valid_case?(player)
     while !@selected_case.match?(/A1|A2|A3|B1|B2|B3|C1|C2|C3/)
       print "Sorry #{player} this is not a valid case, please try again : "
       @selected_case = gets.chomp.upcase
@@ -138,18 +138,17 @@ end
   def win?(mark)
     initialize_win_combo
     rslt = ""
-    @win_combo.each do |k, v|
-       # binding.pry
+    @win_combo.each do |_k, v|
       next unless v[0] == mark && v[1] == mark && v[2] == mark
       rslt = v
       break
     end
-    return rslt
+    rslt
   end
 
   def party_over?
     rslt = true
-    @board.board.flatten.each { |c| rslt = false if c == " "}
+    @board.board.flatten.each { |c| rslt = false if c == " " }
     rslt
   end
 end
