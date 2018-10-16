@@ -1,6 +1,3 @@
-Test First Ruby -- RSpec 3 Edition
-==========
-
 ## Exercice de Mardi 16 Octobre sur le Morpion :sunny: 
 
 ### Greetings
